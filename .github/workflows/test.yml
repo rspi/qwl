@@ -4,12 +4,15 @@ on:
   push:
     branches:
       - master
-      - main
   pull_request:
 
 jobs:
-  test:
+  backend-test:
     runs-on: ubuntu-latest
+    name: Backend tests
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
