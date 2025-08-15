@@ -1,4 +1,10 @@
+import gleam/otp/actor
+import pog
 import wisp
+
+pub type Context {
+  Context(db: actor.Started(pog.Connection))
+}
 
 pub fn middleware(
   req: wisp.Request,

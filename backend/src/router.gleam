@@ -3,7 +3,7 @@ import tag
 import web
 import wisp.{type Request, type Response}
 
-pub fn handle_request(req: Request) -> Response {
+pub fn handle_request(req: Request, _context: web.Context) -> Response {
   use req <- web.middleware(req)
 
   case wisp.path_segments(req) {
