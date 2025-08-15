@@ -3,5 +3,19 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     ports:
       - "4711:4711"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17.6-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      # When running api outside container
+      - "5432:5432"
+
