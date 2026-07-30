@@ -1,5 +1,5 @@
 FROM erlang:28.0.2.0-alpine AS build
-COPY --from=ghcr.io/gleam-lang/gleam:v1.12.0-erlang-alpine /bin/gleam /bin/gleam
+COPY --from=ghcr.io/gleam-lang/gleam:v1.18.0-erlang-alpine /bin/gleam /bin/gleam
 COPY . /app/
 RUN cd /app && gleam export erlang-shipment
 
@@ -10,5 +10,5 @@ RUN \
 USER webapp
 COPY --from=build /app/build/erlang-shipment /app
 WORKDIR /app
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
 CMD ["run"]
