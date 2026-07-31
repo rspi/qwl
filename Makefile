@@ -23,6 +23,10 @@ down:
 pg: .env
 	docker compose exec db psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
+.PHONY: ps
+ps:
+	docker compose ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
+
 .env: .env.template
 	$(CREATE_ENV)
 

@@ -1,7 +1,6 @@
 import gleam/dynamic/decode
 import gleam/http
 import gleam/json
-import gleam/string_tree
 import wisp.{type Request, type Response}
 
 pub type Tag {
@@ -23,7 +22,7 @@ pub fn add_endpoint(req: Request) -> Response {
   let result = decode.run(json, tag_decoder())
 
   case result {
-    Error(_) -> wisp.bad_request()
+    Error(_) -> wisp.bad_request("invalid format")
     Ok(tag) -> {
       wisp.log_warning("Missing implementation to save tag: " <> tag.name)
       wisp.ok()
@@ -36,6 +35,5 @@ pub fn get_all_endpoint(req: Request) -> Response {
   [Tag(name: "TestTag")]
   |> json.array(to_json)
   |> json.to_string
-  |> string_tree.from_string
   |> wisp.json_response(200)
 }
