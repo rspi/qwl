@@ -3,7 +3,7 @@ import tag
 import web
 import wisp.{type Request, type Response}
 
-pub fn handle_request(req: Request, _context: web.Context) -> Response {
+pub fn handle_request(req: Request, context: web.Context) -> Response {
   use req <- web.middleware(req)
 
   case wisp.path_segments(req) {
@@ -13,9 +13,10 @@ pub fn handle_request(req: Request, _context: web.Context) -> Response {
       |> wisp.string_body("Hello world")
     }
 
-    ["tags"] -> tag.get_all_endpoint(req)
-    // curl -d '{"name":"pelle"}' -H "Content-Type: application/json" -X POST 127.0.0.1:4711/add_tag
-    ["add_tag"] -> tag.add_endpoint(req)
+    ["squirrel", "tags"] -> tag.get_all_with_squirrel_endpoint(req, context)
+    ["squirrel", "add_tag"] -> tag.add_with_squirrel_endpoint(req, context)
+    ["parrot", "tags"] -> tag.get_all_with_parrot_endpoint(req, context)
+    ["parrot", "add_tag"] -> tag.add_with_parrot_endpoint(req, context)
     _ -> wisp.not_found()
   }
 }

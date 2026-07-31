@@ -1,0 +1,4 @@
+FROM erlang:28.0.2.0-alpine
+COPY --from=ghcr.io/gleam-lang/gleam:v1.18.0-erlang-alpine /bin/gleam /bin/gleam
+RUN apk add --no-cache postgresql-client ca-certificates
+WORKDIR /app

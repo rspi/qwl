@@ -54,3 +54,12 @@ migrate-new:
 .PHONY: migrate-status
 migrate-status: .env
 	docker compose run --rm dbmate status
+
+.PHONY: generate
+generate: .env
+	rm -f backend/src/squirrel_sql.gleam backend/src/parrot_sql.gleam
+	docker compose run --rm generator sh -c "cd backend && gleam run -m squirrel"
+	mv backend/src/sql.gleam backend/src/squirrel_sql.gleam
+	docker compose run --rm generator sh -c "cd backend && gleam run -m parrot"
+	find backend/src -name "sql.gleam" -exec mv {} backend/src/parrot_sql.gleam \;
+	rm -rf backend/src/backend/sql
