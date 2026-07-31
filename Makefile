@@ -37,3 +37,20 @@ env:
 .PHONY: squirrel
 squirrel: .env
 	cd backend && DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB} gleam run -m squirrel
+
+.PHONY: migrate
+migrate: .env
+	docker compose run --rm dbmate up
+
+.PHONY: rollback
+rollback: .env
+	docker compose run --rm dbmate down
+
+.PHONY: migrate-new
+migrate-new:
+	@if [ -z "$(name)" ]; then echo "Error: 'name' is required. Example: make migrate-new name=create_tag_table"; exit 1; fi
+	docker compose run --rm dbmate new $(name)
+
+.PHONY: migrate-status
+migrate-status: .env
+	docker compose run --rm dbmate status
