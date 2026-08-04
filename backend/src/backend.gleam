@@ -1,6 +1,7 @@
 import envoy
 import gleam/erlang/process
 import gleam/io
+import gleam/otp/actor
 import mist
 import pog
 import router
@@ -23,7 +24,7 @@ pub fn main() {
   let database_url = get_env_or_throw("DATABASE_URL")
   let pog_error = "Unable to connect to " <> database_url
   let assert Ok(config) = pog.url_config(name, database_url) as pog_error
-  let assert Ok(db) = pog.start(config)
+  let assert Ok(actor.Started(data: db, ..)) = pog.start(config)
 
   let handler = router.handle_request(_, web.Context(db: db))
 

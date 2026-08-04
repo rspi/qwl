@@ -3,7 +3,8 @@
 -- 1. Locations
 CREATE TABLE location (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) UNIQUE NOT NULL
+  name VARCHAR(255) UNIQUE NOT NULL,
+  is_outdoor BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- 2. Companions

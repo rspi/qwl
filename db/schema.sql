@@ -80,7 +80,8 @@ ALTER SEQUENCE public.feeling_id_seq OWNED BY public.feeling.id;
 
 CREATE TABLE public.location (
     id integer NOT NULL,
-    name character varying(255) NOT NULL
+    name character varying(255) NOT NULL,
+    is_outdoor boolean DEFAULT false NOT NULL
 );
 
 

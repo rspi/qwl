@@ -1,9 +1,10 @@
 import gleam/http.{Get}
-import tag
+import gleam/int
 import web
 import wisp.{type Request, type Response}
+import workout_session
 
-pub fn handle_request(req: Request, _context: web.Context) -> Response {
+pub fn handle_request(req: Request, context: web.Context) -> Response {
   use req <- web.middleware(req)
 
   case wisp.path_segments(req) {
@@ -13,9 +14,13 @@ pub fn handle_request(req: Request, _context: web.Context) -> Response {
       |> wisp.string_body("Hello world")
     }
 
-    ["tags"] -> tag.get_all_endpoint(req)
-    // curl -d '{"name":"pelle"}' -H "Content-Type: application/json" -X POST 127.0.0.1:4711/add_tag
-    ["add_tag"] -> tag.add_endpoint(req)
+    ["workouts"] -> workout_session.get_all_endpoint(req, context)
+    ["workouts", id_str] -> {
+      case int.parse(id_str) {
+        Ok(id) -> workout_session.get_by_id_endpoint(req, context, id)
+        Error(_) -> wisp.bad_request("Invalid workout session ID format")
+      }
+    }
     _ -> wisp.not_found()
   }
 }
