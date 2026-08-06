@@ -29,6 +29,8 @@ services:
 
   dbmate:
     image: amacneil/dbmate:2.24.0
+    profiles:
+      - tools
     volumes:
       - ./db:/db
     environment:
