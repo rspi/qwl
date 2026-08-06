@@ -41,17 +41,25 @@ fn build_location(
   }
 }
 
-fn workout_session_list_item_to_json(session: WorkoutSessionListItem) -> json.Json {
+fn workout_session_list_item_to_json(
+  session: WorkoutSessionListItem,
+) -> json.Json {
   json.object([
     #("id", json.int(session.id)),
-    #("workout_date", json.string(datetime_utils.date_to_string(session.workout_date))),
+    #(
+      "workout_date",
+      json.string(datetime_utils.date_to_string(session.workout_date)),
+    ),
   ])
 }
 
 fn workout_session_to_json(session: WorkoutSession) -> json.Json {
   json.object([
     #("id", json.int(session.id)),
-    #("workout_date", json.string(datetime_utils.date_to_string(session.workout_date))),
+    #(
+      "workout_date",
+      json.string(datetime_utils.date_to_string(session.workout_date)),
+    ),
     #(
       "start_time",
       json.nullable(from: session.start_time, of: fn(t) {
@@ -117,7 +125,8 @@ pub fn get_by_id_endpoint(req: Request, ctx: web.Context, id: Int) -> Response {
           {
             Ok(types_ret), Ok(companions_ret) -> {
               let session_types = list.map(types_ret.rows, fn(t) { t.name })
-              let session_companions = list.map(companions_ret.rows, fn(c) { c.name })
+              let session_companions =
+                list.map(companions_ret.rows, fn(c) { c.name })
 
               let session =
                 WorkoutSession(
@@ -142,7 +151,9 @@ pub fn get_by_id_endpoint(req: Request, ctx: web.Context, id: Int) -> Response {
               |> wisp.json_response(200)
             }
             _, _ -> {
-              wisp.log_error("Database error while fetching workout session relations")
+              wisp.log_error(
+                "Database error while fetching workout session relations",
+              )
               wisp.internal_server_error()
             }
           }
