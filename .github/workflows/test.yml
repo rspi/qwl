@@ -1,10 +1,6 @@
 name: test
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   backend-test:
@@ -14,13 +10,29 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: "27.1.2"
-          gleam-version: "1.18.0"
+          otp-version: "29"
+          gleam-version: "1.18.1"
           rebar3-version: "3"
-          # elixir-version: "1"
+      - run: gleam deps download
+      - run: gleam test
+      - run: gleam format --check src test
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    name: Frontend tests
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "29"
+          gleam-version: "1.18.1"
+          rebar3-version: "3"
       - run: gleam deps download
       - run: gleam test
       - run: gleam format --check src test

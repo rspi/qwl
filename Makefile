@@ -54,3 +54,7 @@ migrate-new:
 .PHONY: migrate-status
 migrate-status: .env
 	docker compose run --rm dbmate status
+
+.PHONY: frontend-dev-server
+frontend-dev-server:
+	cd frontend && gleam run -m lustre/dev start
