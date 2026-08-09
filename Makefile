@@ -36,7 +36,7 @@ env:
 
 .PHONY: squirrel
 squirrel: .env
-	cd backend && DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB} gleam run -m squirrel
+	cd backend && DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${DB_PORT}/${POSTGRES_DB} gleam run -m squirrel
 
 .PHONY: migrate
 migrate: .env

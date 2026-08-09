@@ -22,6 +22,7 @@ pub fn main() {
 
   let secret_key_base = get_env_or_throw("WISP_SECRET")
   let database_url = get_env_or_throw("DATABASE_URL")
+
   let pog_error = "Unable to connect to " <> database_url
   let assert Ok(config) = pog.url_config(name, database_url) as pog_error
   let assert Ok(actor.Started(data: db, ..)) = pog.start(config)

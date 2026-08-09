@@ -1,5 +1,13 @@
 :80 {
-    root * /srv
-    file_server
-    try_files {path} /index.html
+    # Strip the /api prefix and proxy to the backend container
+    handle_path /api/* {
+        reverse_proxy api:4711
+    }
+
+    # Serve static files for everything else
+    handle {
+        root * /srv
+        file_server
+        try_files {path} /index.html
+    }
 }

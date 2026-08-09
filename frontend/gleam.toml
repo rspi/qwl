@@ -27,3 +27,7 @@ outdir = "./dist"
 [tools.lustre.html]
 title = "qwl"
 
+[tools.lustre.dev]
+proxy = { from = "/api", to = "http://api:4711" }
+
+

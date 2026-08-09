@@ -1,26 +1,25 @@
 # Expose ports for local development
 services:
   api:
+    image: qwl-api-dev
     build:
       target: build
     command: ["watchexec", "--poll", "500ms", "--restart", "-e", "gleam", "--", "gleam", "run"]
     volumes:
       - ./backend:/app
     working_dir: /app
-    ports:
-      - "4711:4711"
   db:
     # for "make squrrel"
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
 
   frontend:
     image: qwl-frontend-dev
     build:
       target: builder
-    command: ["gleam", "run", "-m", "lustre/dev", "start", "--host=0.0.0.0", "--port=1234"]
+    command: ["gleam", "run", "-m", "lustre/dev", "start", "--host=0.0.0.0", "--port=${FRONTEND_DEV_PORT}"]
     ports:
-      - "1234:1234"
+      - "${FRONTEND_DEV_PORT}:${FRONTEND_DEV_PORT}"
     volumes:
       - ./frontend:/app
     environment:
