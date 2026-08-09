@@ -1,4 +1,4 @@
-# Expose ports for local development
+# Overrides for local development
 services:
   api:
     image: qwl-api-dev
