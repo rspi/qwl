@@ -1,4 +1,4 @@
-import datetime_utils
+import shared/datetime_utils
 import gleam/time/calendar
 
 pub fn format_int_with_padding_test() {
@@ -22,4 +22,22 @@ pub fn time_to_string_test() {
     datetime_utils.time_to_string(calendar.TimeOfDay(17, 8, 47, 0))
   let assert "09:05:00" =
     datetime_utils.time_to_string(calendar.TimeOfDay(9, 5, 0, 100))
+}
+
+pub fn string_to_date_test() {
+  let assert Ok(calendar.Date(2026, calendar.August, 3)) =
+    datetime_utils.string_to_date("2026-08-03")
+  let assert Ok(calendar.Date(2025, calendar.December, 19)) =
+    datetime_utils.string_to_date("2025-12-19")
+  let assert Error(Nil) = datetime_utils.string_to_date("invalid-date")
+  let assert Error(Nil) = datetime_utils.string_to_date("2026-13-03")
+}
+
+pub fn string_to_time_test() {
+  let assert Ok(calendar.TimeOfDay(17, 8, 47, 0)) =
+    datetime_utils.string_to_time("17:08:47")
+  let assert Ok(calendar.TimeOfDay(9, 5, 0, 0)) =
+    datetime_utils.string_to_time("09:05:00")
+  let assert Error(Nil) = datetime_utils.string_to_time("invalid-time")
+  let assert Error(Nil) = datetime_utils.string_to_time("25:00:00")
 }

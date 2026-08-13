@@ -3,6 +3,23 @@ name: test
 on: [push, pull_request]
 
 jobs:
+  shared-test:
+    runs-on: ubuntu-latest
+    name: Shared tests
+    defaults:
+      run:
+        working-directory: ./shared
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "29"
+          gleam-version: "1.18.1"
+          rebar3-version: "3"
+      - run: gleam deps download
+      - run: gleam test
+      - run: gleam format --check src test
+
   backend-test:
     runs-on: ubuntu-latest
     name: Backend tests

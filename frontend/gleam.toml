@@ -14,6 +14,8 @@ target = "javascript"
 # https://gleam.run/writing-gleam/gleam-toml/.
 
 [dependencies]
+shared = { path = "../shared" }
+gleam_json = ">= 3.0.2 and < 4.0.0"
 gleam_stdlib = ">= 1.0.0 and < 2.0.0"
 lustre = ">= 5.7.1 and < 6.0.0"
 

@@ -1,35 +1,14 @@
-import datetime_utils
 import gleam/http
 import gleam/json
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import gleam/time/calendar
+import shared/workout_session.{
+  type Location, Location, WorkoutSession, WorkoutSessionListItem,
+  workout_session_list_item_to_json, workout_session_to_json,
+}
 import sql
 import web
 import wisp.{type Request, type Response}
-
-pub type Location {
-  Location(name: String, is_outdoor: Bool)
-}
-
-pub type WorkoutSession {
-  WorkoutSession(
-    id: Int,
-    workout_date: calendar.Date,
-    start_time: Option(calendar.TimeOfDay),
-    end_time: Option(calendar.TimeOfDay),
-    duration_minutes: Int,
-    effort: Option(Int),
-    location: Option(Location),
-    feeling: Option(String),
-    workout_types: List(String),
-    companions: List(String),
-  )
-}
-
-pub type WorkoutSessionListItem {
-  WorkoutSessionListItem(id: Int, workout_date: calendar.Date)
-}
 
 fn build_location(
   name: Option(String),
@@ -39,54 +18,6 @@ fn build_location(
     Some(name), Some(is_outdoor) -> Some(Location(name:, is_outdoor:))
     _, _ -> None
   }
-}
-
-fn workout_session_list_item_to_json(
-  session: WorkoutSessionListItem,
-) -> json.Json {
-  json.object([
-    #("id", json.int(session.id)),
-    #(
-      "workout_date",
-      json.string(datetime_utils.date_to_string(session.workout_date)),
-    ),
-  ])
-}
-
-fn workout_session_to_json(session: WorkoutSession) -> json.Json {
-  json.object([
-    #("id", json.int(session.id)),
-    #(
-      "workout_date",
-      json.string(datetime_utils.date_to_string(session.workout_date)),
-    ),
-    #(
-      "start_time",
-      json.nullable(from: session.start_time, of: fn(t) {
-        json.string(datetime_utils.time_to_string(t))
-      }),
-    ),
-    #(
-      "end_time",
-      json.nullable(from: session.end_time, of: fn(t) {
-        json.string(datetime_utils.time_to_string(t))
-      }),
-    ),
-    #("duration_minutes", json.int(session.duration_minutes)),
-    #("effort", json.nullable(from: session.effort, of: json.int)),
-    #(
-      "location",
-      json.nullable(from: session.location, of: fn(l) {
-        json.object([
-          #("name", json.string(l.name)),
-          #("is_outdoor", json.bool(l.is_outdoor)),
-        ])
-      }),
-    ),
-    #("feeling", json.nullable(from: session.feeling, of: json.string)),
-    #("workout_types", json.array(session.workout_types, of: json.string)),
-    #("companions", json.array(session.companions, of: json.string)),
-  ])
 }
 
 pub fn get_all_endpoint(req: Request, ctx: web.Context) -> Response {

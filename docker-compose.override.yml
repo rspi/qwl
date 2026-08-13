@@ -6,8 +6,8 @@ services:
       target: build
     command: ["watchexec", "--poll", "500ms", "--restart", "-e", "gleam", "--", "gleam", "run"]
     volumes:
-      - ./backend:/app
-    working_dir: /app
+      - .:/app
+    working_dir: /app/backend
   db:
     # for "make squrrel"
     ports:
@@ -21,7 +21,7 @@ services:
     ports:
       - "${FRONTEND_DEV_PORT}:${FRONTEND_DEV_PORT}"
     volumes:
-      - ./frontend:/app
+      - .:/app
+    working_dir: /app/frontend
     environment:
       - CHOKIDAR_USEPOLLING=true
-

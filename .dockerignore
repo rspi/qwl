@@ -1,0 +1,7 @@
+**/build/dev
+**/build/prod
+**/.lustre
+**/dist
+.git
+.github
+.env

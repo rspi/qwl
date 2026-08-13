@@ -4,14 +4,15 @@ RUN apk add --no-cache curl tar bash
 
 WORKDIR /app
 
-COPY gleam.toml manifest.toml ./
+# Copy the shared package and frontend package
+COPY shared /app/shared
+COPY frontend /app/frontend
+
+WORKDIR /app/frontend
 RUN gleam deps download
-
-COPY . .
-
 RUN gleam run -m lustre/dev build frontend --minify
 
 FROM caddy:2-alpine
 
-COPY Caddyfile /etc/caddy/Caddyfile
-COPY --from=builder /app/dist /srv
+COPY frontend/Caddyfile /etc/caddy/Caddyfile
+COPY --from=builder /app/frontend/dist /srv
