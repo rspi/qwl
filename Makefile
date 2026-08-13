@@ -38,6 +38,10 @@ env:
 squirrel: .env
 	cd backend && DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${DB_PORT}/${POSTGRES_DB} gleam run -m squirrel
 
+.PHONY: dev-data-seed
+dev-data-seed: .env
+	cd backend && DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${DB_PORT}/${POSTGRES_DB} gleam run -m dev_data_seed
+
 .PHONY: migrate
 migrate: .env
 	docker compose run --rm dbmate up

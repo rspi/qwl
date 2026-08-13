@@ -127,6 +127,7 @@ CREATE TABLE public.workout_session (
     location_id integer,
     feeling_id integer,
     effort integer,
+    CONSTRAINT check_start_and_end_time CHECK ((((start_time IS NULL) AND (end_time IS NULL)) OR ((start_time IS NOT NULL) AND (end_time IS NOT NULL)))),
     CONSTRAINT workout_session_effort_check CHECK (((effort >= 1) AND (effort <= 5)))
 );
 

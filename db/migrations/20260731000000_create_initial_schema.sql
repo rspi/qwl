@@ -34,7 +34,12 @@ CREATE TABLE workout_session (
   duration_minutes INTEGER NOT NULL,
   location_id INTEGER REFERENCES location(id) ON DELETE SET NULL,
   feeling_id INTEGER REFERENCES feeling(id) ON DELETE SET NULL,
-  effort INTEGER CHECK (effort >= 1 AND effort <= 5)
+  effort INTEGER CHECK (effort >= 1 AND effort <= 5),
+  CONSTRAINT check_start_and_end_time CHECK (
+    (start_time IS NULL AND end_time IS NULL)
+    OR
+    (start_time IS NOT NULL AND end_time IS NOT NULL)
+  )
 );
 
 -- Many-to-Many junctions
