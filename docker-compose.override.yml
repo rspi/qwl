@@ -8,6 +8,25 @@ services:
     volumes:
       - .:/app
     working_dir: /app/backend
+    depends_on:
+      db:
+        condition: service_healthy
+      db-migrate:
+        condition: service_completed_successfully
+
+  db-migrate:
+    image: amacneil/dbmate:2.24.0
+    volumes:
+      - ./db:/db
+    networks:
+      - backend-net
+    environment:
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable"
+    command: up
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     # for "make squrrel"
     ports:

@@ -7,13 +7,13 @@ endif
 
 CREATE_ENV = cp .env.template .env
 
-.PHONY: up
-up: .env
+.PHONY: dev-up
+dev-up: .env
 	docker compose up
 
-.PHONY: upd
-upd: .env
-	docker compose up --detach
+.PHONY: up
+up: .env
+	docker compose -f docker-compose.yml up --detach --build
 
 .PHONY: down
 down:
